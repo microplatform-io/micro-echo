@@ -14,11 +14,7 @@ func main() {
 
 	service.AddHandler("/platform/create/echo", platform.HandlerFunc(func(responseSender platform.ResponseSender, request *platform.Request) {
 		responseSender.Send(platform.GenerateResponse(request, &platform.Request{
-			Routing: &platform.Routing{
-				RouteTo: []*platform.Route{
-					&platform.Route{Uri: platform.String("resource:///platform/reply/echo")},
-				},
-			},
+			Routing:   platform.RouteToUri("resource:///platform/reply/echo"),
 			Context:   request.Context,
 			Payload:   request.Payload,
 			Completed: platform.Bool(true),

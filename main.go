@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	service, err := platform.NewBasicService()
+	service, err := platform.NewBasicService("micro-echo")
 	if err != nil {
 		log.Fatalf("failed to create service: %s", err)
 	}

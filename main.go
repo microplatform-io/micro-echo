@@ -36,6 +36,7 @@ func main() {
 					},
 				},
 			}),
+			Completed: platform.Bool(true),
 		}))
 	}), 1)
 

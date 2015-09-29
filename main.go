@@ -4,7 +4,11 @@ import (
 	"log"
 
 	"github.com/microplatform-io/platform"
+	"strconv"
+	"time"
 )
+
+var delay = platform.Getenv("DELAY", "0")
 
 func main() {
 	service, err := platform.NewBasicService("micro-echo")
@@ -13,13 +17,20 @@ func main() {
 	}
 
 	service.AddHandler("/platform/create/echo", platform.HandlerFunc(func(responseSender platform.ResponseSender, request *platform.Request) {
+		d, err := strconv.Atoi(delay)
+		if err != nil {
+			d = 0
+		}
+
+		time.Sleep(time.Duration(d) * time.Second)
+
 		responseSender.Send(platform.GenerateResponse(request, &platform.Request{
 			Routing:   platform.RouteToUri("resource:///platform/reply/echo"),
 			Context:   request.Context,
 			Payload:   request.Payload,
 			Completed: platform.Bool(true),
 		}))
-	}), 1)
+	}))
 
 	service.AddHandler("/platform/get/documentation", platform.HandlerFunc(func(responseSender platform.ResponseSender, request *platform.Request) {
 		responseSender.Send(platform.GenerateResponse(request, &platform.Request{
@@ -38,7 +49,7 @@ func main() {
 			}),
 			Completed: platform.Bool(true),
 		}))
-	}), 1)
+	}))
 
 	service.Run()
 }
